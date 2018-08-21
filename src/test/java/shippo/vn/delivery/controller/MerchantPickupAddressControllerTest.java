@@ -74,7 +74,7 @@ public class MerchantPickupAddressControllerTest {
         int status = result.getResponse().getStatus();
         assertEquals("Incorrect Response Status", HttpStatus.OK.value(), status);
 
-        // verify that service method was called once
+        // verify that service method was called once.
         verify(merchantPickupAddressService).findById(any(Integer.class));
 
         MerchantPickupAddress resultMerchantPickupAddress = TestUtils.jsonToObject(result.getResponse().getContentAsString(), MerchantPickupAddress.class);

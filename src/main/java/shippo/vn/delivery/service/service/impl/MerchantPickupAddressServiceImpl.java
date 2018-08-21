@@ -47,8 +47,8 @@ public class MerchantPickupAddressServiceImpl implements MerchantPickupAddressSe
     }
 
     @Override
-    public MerchantPickupAddress findAllByPickupContactNameAndPickupContactPhone (String pickupContactName, String pickupContactPhone){
-        return merchantPickupAddressRepository.findAllByPickupContactNameAndPickupContactPhone(pickupContactName, pickupContactPhone);
+    public MerchantPickupAddress findAllByPickupContactName (String pickupContactName ){
+        return merchantPickupAddressRepository.findAllByPickupContactNameAndPickupContactPhone(pickupContactName);
     }
 
     @Override

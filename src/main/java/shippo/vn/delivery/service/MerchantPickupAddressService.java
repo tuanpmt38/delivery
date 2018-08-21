@@ -25,6 +25,6 @@ public interface MerchantPickupAddressService {
 
     boolean exists(MerchantPickupAddress merchantPickupAddress) ;
 
-    MerchantPickupAddress findAllByPickupContactNameAndPickupContactPhone (String pickupContactName, String pickupContactPhone);
+    MerchantPickupAddress findAllByPickupContactName (String pickupContactName);
 
 }

@@ -26,8 +26,12 @@ import java.util.List;
 import java.util.Optional;
 
 import static junit.framework.TestCase.assertNotNull;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @RunWith(SpringRunner.class)
@@ -78,15 +82,27 @@ public class MerchantPickupAddressControllerTest {
         assertEquals(1l, resultMerchantPickupAddress.getId().longValue());
     }
 
-    private List<MerchantPickupAddress> buildMerchantPickupAddress() {
-        MerchantPickupAddress merchantPickupAddress1 = new MerchantPickupAddress(
 
+    @Test
+    public void test_create_user_success() throws Exception {
+        MerchantPickupAddress user = new MerchantPickupAddress(
+                1, true, 4, 1, "Số nhà 178 ngõ 126 phố Không Mùa", "Lương Thanh Lâm", "0912310570", "Số nhà 287 ngõ 115 phố Nguyễn Xiển, Đống Đa, Hà Nội", 9,
+                "null", 99, null, null
         );
-        MerchantPickupAddress merchantPickupAddress2 = new MerchantPickupAddress(
+        when(merchantPickupAddressService.exists(user)).thenReturn(false);
 
-        );
-        List<MerchantPickupAddress> pickupAddressList = Arrays.asList(merchantPickupAddress1, merchantPickupAddress2);
-        return pickupAddressList;
+        doNothing().when(merchantPickupAddressService).save(user);
+        mockMvc.perform(
+                post("/pickup_address")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(user)))
+                .andExpect(status().isCreated())
+                .andExpect(header().string("location", containsString("http://localhost/pickup_address")));
+        verify(merchantPickupAddressService, times(1)).exists(user);
+
+        verify(merchantPickupAddressService, times(1)).save(user);
+
+        verifyNoMoreInteractions(merchantPickupAddressService);
     }
 
 
@@ -99,5 +115,18 @@ public class MerchantPickupAddressControllerTest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private List<MerchantPickupAddress> buildMerchantPickupAddress() {
+        MerchantPickupAddress merchantPickupAddress1 = new MerchantPickupAddress(
+                1, true, 4, 1, "Số nhà 178 ngõ 126 phố Không Mùa", "Lương Thanh Lâm", "0912310570", "Số nhà 287 ngõ 115 phố Nguyễn Xiển, Đống Đa, Hà Nội", 9,
+                "null", 99, null, null
+        );
+        MerchantPickupAddress merchantPickupAddress2 = new MerchantPickupAddress(
+                2, true, 5, 1, "Số nhà 178 ngõ 126 phố Không Mùa", "Lương Thanh Lâm", "0912310570", "Số nhà 287 ngõ 115 phố Nguyễn Xiển, Đống Đa, Hà Nội", 9,
+                "null", 99, null, null
+        );
+        List<MerchantPickupAddress> pickupAddressList = Arrays.asList(merchantPickupAddress1, merchantPickupAddress2);
+        return pickupAddressList;
     }
 }

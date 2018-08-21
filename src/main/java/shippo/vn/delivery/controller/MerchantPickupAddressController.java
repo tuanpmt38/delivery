@@ -113,9 +113,9 @@ public class MerchantPickupAddressController {
     }
 
     @RequestMapping(value = "/pickup_address/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<MerchantPickupAddress> getAllMerchantPickupAddressByPickupContactNameAndPickupContactPhone(@RequestParam("pickupContactName")String pickupContactName, @RequestParam("pickupContactPhone") String pickupContactPhone) {
+    public ResponseEntity<MerchantPickupAddress> getAllMerchantPickupAddressByPickupContactName(@RequestParam("pickupContactName")String pickupContactName) {
 
-        MerchantPickupAddress merchantPickupAddress = merchantPickupAddressService.findAllByPickupContactNameAndPickupContactPhone(pickupContactName, pickupContactPhone );
+        MerchantPickupAddress merchantPickupAddress = merchantPickupAddressService.findAllByPickupContactName(pickupContactName );
         logger.info("Merchant pickup address: " + merchantPickupAddress);
 
         return new ResponseEntity<>(merchantPickupAddress, HttpStatus.OK);

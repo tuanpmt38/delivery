@@ -1,10 +1,10 @@
-package shippo.vn.delivery.service.service.impl;
+package shippo.vn.delivery.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import shippo.vn.delivery.model.DeliveryOrder;
 import shippo.vn.delivery.repository.DeliveryOrderRepository;
-import shippo.vn.delivery.service.service.DeliveryOrderService;
+import shippo.vn.delivery.services.DeliveryOrderService;
 
 import java.util.Optional;
 

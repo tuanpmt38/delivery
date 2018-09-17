@@ -1,4 +1,4 @@
-package shippo.vn.delivery.service.service;
+package shippo.vn.delivery.services;
 
 import shippo.vn.delivery.model.TransactionHistory;
 

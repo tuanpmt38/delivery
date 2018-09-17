@@ -1,4 +1,4 @@
-package shippo.vn.delivery.service.service;
+package shippo.vn.delivery.services;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,7 +15,7 @@ List<MerchantPickupAddress> findAll();
 
 Optional<MerchantPickupAddress> findById(Integer id);
 
-void save(MerchantPickupAddress merchantPickupAddress);
+MerchantPickupAddress save(MerchantPickupAddress merchantPickupAddress);
 
 void delete(Integer id);
 
@@ -24,6 +24,6 @@ MerchantPickupAddress findByContactName(String contactName);
 
 boolean exists(MerchantPickupAddress merchantPickupAddress) ;
 
-MerchantPickupAddress findAllByPickupContactNameAndPickupContactPhone(String pickupContactName, String pickupContactPhone);
+MerchantPickupAddress findByContactPhone(String pickupContactPhone);
 
 }

@@ -15,6 +15,6 @@ public interface MerchantPickupAddressRepository extends PagingAndSortingReposit
     @Query(value = "select * from merchant_pickup_address m where m.is_deleted = true ", nativeQuery = true)
     Page<MerchantPickupAddress> findAll(Pageable pageable);
 
-    @Query(value = "select * from merchant_pickup_address m where m.pickup_contact_name = ?1 " ,nativeQuery = true)
-    MerchantPickupAddress findAllByPickupContactNameAndPickupContactPhone(String pickupContactName);
+    @Query(value = "select * from merchant_pickup_address m where m.pickup_contact_phone = ?1 " ,nativeQuery = true)
+    MerchantPickupAddress findByContactPhone(String pickupContactPhone);
 }

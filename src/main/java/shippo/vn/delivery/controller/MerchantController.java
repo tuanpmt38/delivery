@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import shippo.vn.delivery.model.DeliveryOrderFee;
 import shippo.vn.delivery.model.Merchant;
-import shippo.vn.delivery.service.service.MerchantService;
+import shippo.vn.delivery.services.MerchantService;
 
 import java.util.List;
 import java.util.Optional;

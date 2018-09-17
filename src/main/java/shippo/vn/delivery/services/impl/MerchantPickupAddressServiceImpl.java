@@ -1,4 +1,4 @@
-package shippo.vn.delivery.service.service.impl;
+package shippo.vn.delivery.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import shippo.vn.delivery.model.MerchantPickupAddress;
 import shippo.vn.delivery.repository.MerchantPickupAddressRepository;
-import shippo.vn.delivery.service.MerchantPickupAddressService;
+import shippo.vn.delivery.services.MerchantPickupAddressService;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +16,7 @@ import java.util.Optional;
 public class MerchantPickupAddressServiceImpl implements MerchantPickupAddressService {
 
     private MerchantPickupAddressRepository merchantPickupAddressRepository;
+
 
     @Autowired
     public MerchantPickupAddressServiceImpl(MerchantPickupAddressRepository merchantPickupAddressRepository){
@@ -37,8 +38,9 @@ public class MerchantPickupAddressServiceImpl implements MerchantPickupAddressSe
     }
 
     @Override
-    public void save(MerchantPickupAddress merchantPickupAddress) {
+    public MerchantPickupAddress save(MerchantPickupAddress merchantPickupAddress) {
         merchantPickupAddressRepository.save(merchantPickupAddress);
+        return merchantPickupAddress;
     }
 
     @Override
@@ -47,9 +49,14 @@ public class MerchantPickupAddressServiceImpl implements MerchantPickupAddressSe
     }
 
     @Override
-    public MerchantPickupAddress findAllByPickupContactName (String pickupContactName ){
-        return merchantPickupAddressRepository.findAllByPickupContactNameAndPickupContactPhone(pickupContactName);
+    public MerchantPickupAddress findByContactPhone(String pickupContactPhone) {
+        return merchantPickupAddressRepository.findByContactPhone(pickupContactPhone);
     }
+
+    //    @Override
+//    public MerchantPickupAddress  (String pickupContactPhone){
+//        return merchantPickupAddressRepository.findByContactPhone(pickupContactPhone);
+//    }
 
     @Override
     public MerchantPickupAddress findByContactName(String contactName) {

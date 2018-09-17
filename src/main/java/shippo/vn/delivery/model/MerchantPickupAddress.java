@@ -57,6 +57,10 @@ public class MerchantPickupAddress implements Serializable {
 	public MerchantPickupAddress() {
 	}
 
+	public MerchantPickupAddress(Integer id) {
+		this.id = id;
+	}
+
 	public MerchantPickupAddress(Integer id, Boolean isDeleted, Integer createdBy, Integer merchantId, String detailAddress, String contactName, String contactPhone, String fullAddress, Integer locationIdsPath, String locationNamesPath, Integer version, Timestamp createdAt, Timestamp updatedAt) {
 		this.id = id;
 		this.createdBy = createdBy;

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import shippo.vn.delivery.model.TransactionHistory;
 import shippo.vn.delivery.repository.TransactionHistoriesRepository;
-import shippo.vn.delivery.service.service.TransactionHistoriesService;
+import shippo.vn.delivery.services.TransactionHistoriesService;
 
 import java.util.List;
 

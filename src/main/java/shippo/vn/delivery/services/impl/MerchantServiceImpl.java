@@ -1,10 +1,10 @@
-package shippo.vn.delivery.service.service.impl;
+package shippo.vn.delivery.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import shippo.vn.delivery.model.Merchant;
 import shippo.vn.delivery.repository.MerchantRepository;
-import shippo.vn.delivery.service.service.MerchantService;
+import shippo.vn.delivery.services.MerchantService;
 
 import java.util.List;
 import java.util.Optional;

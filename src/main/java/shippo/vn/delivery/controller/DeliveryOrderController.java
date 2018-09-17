@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import shippo.vn.delivery.model.DeliveryOrder;
 import shippo.vn.delivery.model.DeliveryOrderFee;
-import shippo.vn.delivery.service.service.DeliveryOrderService;
+import shippo.vn.delivery.services.DeliveryOrderService;
 
 import java.util.HashMap;
 import java.util.Map;

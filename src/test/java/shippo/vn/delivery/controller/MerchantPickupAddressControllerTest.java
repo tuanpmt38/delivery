@@ -1,6 +1,9 @@
 package shippo.vn.delivery.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.reflect.TypeToken;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,19 +21,19 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import shippo.vn.delivery.TestUtils;
+import shippo.vn.delivery.model.DeliveryOrderFee;
 import shippo.vn.delivery.model.MerchantPickupAddress;
-import shippo.vn.delivery.service.MerchantPickupAddressService;
+import shippo.vn.delivery.services.MerchantPickupAddressService;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import static junit.framework.TestCase.assertNotNull;
-import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -38,6 +41,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @WebMvcTest(MerchantPickupAddressController.class)
 public class MerchantPickupAddressControllerTest {
+
+    private static final int UNKNOWN_ID = Integer.MAX_VALUE;
 
     @Autowired
     private MockMvc mockMvc;
@@ -56,68 +61,113 @@ public class MerchantPickupAddressControllerTest {
                 .build();
     }
 
-    private final String URL = "/pickup_address/";
-
+    private final String URL = "/pickup_address";
 
     @Test
     public void testGetMerchantPickupAddressById() throws Exception {
+
         MerchantPickupAddress merchantPickupAddress = new MerchantPickupAddress(
                 1, true, 3, 1, "Số nhà 178 ngõ 126 phố Không Mùa", "Lương Thanh Lâm", "0912310570", "Số nhà 287 ngõ 115 phố Nguyễn Xiển, Đống Đa, Hà Nội", 9,
                 "null", 99, null, null
         );
         when(merchantPickupAddressService.findById(1)).thenReturn(Optional.of(merchantPickupAddress));
         MvcResult result = mockMvc
-                .perform(MockMvcRequestBuilders.get(URL + "{id}", new Integer(1)).accept(MediaType.APPLICATION_JSON_UTF8))
+                .perform(MockMvcRequestBuilders.get(URL + "/" + "{id}", new Integer(1)).accept(MediaType.APPLICATION_JSON_UTF8))
                 .andReturn();
 
         // verify
         int status = result.getResponse().getStatus();
         assertEquals("Incorrect Response Status", HttpStatus.OK.value(), status);
 
-        // verify that service method was called once.
+        // verify that services method was called once.
         verify(merchantPickupAddressService).findById(any(Integer.class));
 
         MerchantPickupAddress resultMerchantPickupAddress = TestUtils.jsonToObject(result.getResponse().getContentAsString(), MerchantPickupAddress.class);
         assertNotNull(resultMerchantPickupAddress);
-        assertEquals(1l, resultMerchantPickupAddress.getId().longValue());
+        assertEquals(1l, resultMerchantPickupAddress.getId().intValue());
     }
-
 
     @Test
-    public void test_create_user_success() throws Exception {
-        MerchantPickupAddress user = new MerchantPickupAddress(
-                1, true, 4, 1, "Số nhà 178 ngõ 126 phố Không Mùa", "Lương Thanh Lâm", "0912310570", "Số nhà 287 ngõ 115 phố Nguyễn Xiển, Đống Đa, Hà Nội", 9,
-                "null", 99, null, null
-        );
-        when(merchantPickupAddressService.exists(user)).thenReturn(false);
+    public void testGetMerchantPickupAddressByIdNotExist() throws Exception {
 
-        doNothing().when(merchantPickupAddressService).save(user);
-        mockMvc.perform(
-                post("/pickup_address")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(user)))
-                .andExpect(status().isCreated())
-                .andExpect(header().string("location", containsString("http://localhost/pickup_address")));
-        verify(merchantPickupAddressService, times(1)).exists(user);
+        // execute
+        MvcResult result = mockMvc
+                .perform(MockMvcRequestBuilders.get(URL + "/" + "{id}", new Long(1)).accept(MediaType.APPLICATION_JSON_UTF8))
+                .andReturn();
 
-        verify(merchantPickupAddressService, times(1)).save(user);
+        // verify
+        int status = result.getResponse().getStatus();
+        assertEquals("Incorrect Response Status", HttpStatus.NOT_FOUND.value(), status);
 
-        verifyNoMoreInteractions(merchantPickupAddressService);
+        // verify that service method was called once
+        verify(merchantPickupAddressService).findById(any(Integer.class));
+
+        MerchantPickupAddress resultEmployee = TestUtils.jsonToObject(result.getResponse().getContentAsString(), MerchantPickupAddress.class);
+        assertNull(resultEmployee);
     }
 
+    @Test
+    public void testGetAllMerchantPickupAddress() throws Exception {
 
-    /*
-     * converts a Java object into JSON representation
-     */
-    public static String asJsonString(final Object obj) {
-        try {
-            return new ObjectMapper().writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        // prepare data and mock's behaviour
+        List<MerchantPickupAddress> merchantPickupAddressList = buildMerchantPickupAddress();
+        when(merchantPickupAddressService.findAll()).thenReturn(merchantPickupAddressList);
+
+        // execute
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get(URL).accept(MediaType.APPLICATION_JSON_UTF8))
+                .andReturn();
+
+        // verify
+        int status = result.getResponse().getStatus();
+        assertEquals("Incorrect Response Status", HttpStatus.OK.value(), status);
+
+        verify(merchantPickupAddressService).findAll();
+
+    }
+
+    @Test
+    public void testUpdateMerchantPickupAddress() throws Exception {
+
+        MerchantPickupAddress merchantPickupAddress = new MerchantPickupAddress(
+                1, true, 4, 1, "Số nhà 178 ngõ 126 phố", "Lương Thanh Lâm", "0912310570", "Số nhà 287 ngõ 115 phố Nguyễn Xiển, Đống Đa, Hà Nội", 9,
+                "null", 99, null, null
+        );
+        when(merchantPickupAddressService.findById(1)).thenReturn(Optional.of(merchantPickupAddress));
+
+        mockMvc.perform(
+                put(URL+"/"+"{id}", merchantPickupAddress.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(TestUtils.asJsonString(merchantPickupAddress)))
+                .andExpect(status().isOk());
+
+        verify(merchantPickupAddressService, times(1)).findById(merchantPickupAddress.getId());
+        verify(merchantPickupAddressService, times(1)).save(merchantPickupAddress);
+        verifyNoMoreInteractions(merchantPickupAddressService);
+
+    }
+
+    @Test
+    public void testDeleteMerchantPickupAddress() throws Exception {
+
+        // prepare data and mock's behaviour
+        MerchantPickupAddress merchantPickupAddress = new MerchantPickupAddress(1);
+        when(merchantPickupAddressService.findById(any(Integer.class))).thenReturn(Optional.of(merchantPickupAddress));
+        doNothing().when(merchantPickupAddressService).delete(merchantPickupAddress.getId());
+        // execute
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get(URL + "/" + "{id}", new Integer(1))).andReturn();
+
+        mockMvc.perform(
+                delete("/pickup_address/{id}", merchantPickupAddress.getId()))
+                .andExpect(status().isOk());
+
+        verify(merchantPickupAddressService, times(1)).findById(merchantPickupAddress.getId());
+        verify(merchantPickupAddressService, times(1)).delete(merchantPickupAddress.getId());
+        verifyNoMoreInteractions(merchantPickupAddressService);
+
     }
 
     private List<MerchantPickupAddress> buildMerchantPickupAddress() {
+
         MerchantPickupAddress merchantPickupAddress1 = new MerchantPickupAddress(
                 1, true, 4, 1, "Số nhà 178 ngõ 126 phố Không Mùa", "Lương Thanh Lâm", "0912310570", "Số nhà 287 ngõ 115 phố Nguyễn Xiển, Đống Đa, Hà Nội", 9,
                 "null", 99, null, null

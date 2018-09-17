@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import shippo.vn.delivery.model.DeliveryOrderFee;
 import shippo.vn.delivery.repository.DeliveryOrderFeeRepository;
-import shippo.vn.delivery.service.service.DeliveryOrderFeeService;
+import shippo.vn.delivery.services.DeliveryOrderFeeService;
 
 import java.util.List;
 import java.util.Optional;

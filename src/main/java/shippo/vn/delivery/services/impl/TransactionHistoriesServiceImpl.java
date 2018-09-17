@@ -1,10 +1,10 @@
-package shippo.vn.delivery.service.service.impl;
+package shippo.vn.delivery.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import shippo.vn.delivery.model.TransactionHistory;
 import shippo.vn.delivery.repository.TransactionHistoriesRepository;
-import shippo.vn.delivery.service.service.TransactionHistoriesService;
+import shippo.vn.delivery.services.TransactionHistoriesService;
 
 import java.sql.Timestamp;
 import java.util.List;

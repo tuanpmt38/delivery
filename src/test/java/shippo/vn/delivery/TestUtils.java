@@ -1,6 +1,7 @@
 package shippo.vn.delivery;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -8,8 +9,6 @@ import java.util.List;
 
 /**
  *
- * @author bytesTree
- * @see <a href="http://www.bytestree.com/">BytesTree</a>
  *
  */
 public class TestUtils {
@@ -28,5 +27,13 @@ public class TestUtils {
     public static <T> T jsonToObject(String json, Class<T> classOf) {
         Gson gson = new Gson();
         return gson.fromJson(json, classOf);
+    }
+
+    public static String asJsonString(final Object obj) {
+        try {
+            return new ObjectMapper().writeValueAsString(obj);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
